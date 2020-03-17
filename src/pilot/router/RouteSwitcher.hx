@@ -10,7 +10,6 @@ class RouteSwitcher extends Component {
   @:attribute var children:Children;
   @:attribute var currentUrl:String = '/';
   @:attribute( inject = HistoryProvider.ID ) var history:History;
-  var subscribers:Array<Route> = [];
   var historySub:SignalSubscription<String>;
 
   @:init

@@ -2,14 +2,18 @@ package pilot.router;
 
 import pilot.Component;
 import pilot.Children;
-import pilot.Provider;
 
 class Router extends Component {
 
-  @:attribute var root:String;
+  // not sure about `root` here
+  @:attribute var root:String = '';
   @:attribute var children:Children;
   @:attribute var history:History;
-  var routeContext:RouteContext = new RouteContext();
+
+  @:init
+  public function setRoot() {
+    history.setRoot(root);
+  }
 
   override function render() return html(
     <HistoryProvider value={history}>

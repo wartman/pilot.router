@@ -17,14 +17,16 @@ class Test {
     Pilot.mount(
       Pilot.document.getElementById('root'),
       Pilot.html(<>
-        <Router root='/' history={history}>
+        <Router root='' history={history}>
           <button onClick={_ -> history.push('/')}>Home</button>
           <button onClick={_ -> history.push('/foo/changed')}>Changed</button>
           <button onClick={_ -> history.push('/foo/barg')}>Barg</button>
-          <RouteSwitcher>
-            <Route url="/foo/:id" component={FooComponent} />
-            <Route url="/" component={HomeComponent} />
-          </RouteSwitcher>
+          <div>
+            <RouteSwitcher>
+              <Route url="/foo/:id" component={FooComponent} />
+              <Route url="/" component={HomeComponent} />
+            </RouteSwitcher>
+          </div>
         </Router>
       </>)
     );

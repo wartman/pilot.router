@@ -3,8 +3,12 @@ package pilot.router;
 import pilot.Signal;
 import js.Browser;
 
+using haxe.io.Path;
+using StringTools;
+
 class BroswerHistory implements History {
 
+  var root:String;
   final onPopState:Signal<String> = new Signal();
 
   public function new() {
@@ -13,8 +17,16 @@ class BroswerHistory implements History {
     });
   }
 
+  public function setRoot(root:String) {
+    this.root = root;
+  }
+
   public function getLocation() {
-    return Browser.location.pathname;
+    var path = Browser.location.pathname;
+    if (path.startsWith(root)) {
+      return path.substring(root.length);
+    }
+    return path;
   }
 
   public function push(url:String) {
