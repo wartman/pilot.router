@@ -4,16 +4,12 @@ using StringTools;
 
 class StaticHistory implements History {
   
-  final onPopState:Signal<String> = new Signal();
-  var root:String;
+  final onChange:Signal<String> = new Signal();
+  var root:String = '';
   var currentUrl:String;
 
   public function new(?initUrl) {
     currentUrl = initUrl;
-  }
-  
-  public function setRoot(root:String) {
-    this.root = root;
   }
 
   public function getLocation() {
@@ -26,11 +22,11 @@ class StaticHistory implements History {
 
   public function push(url:String) {
     currentUrl = url;
-    onPopState.dispatch(getLocation());
+    onChange.dispatch(getLocation());
   }
 
   public inline function subscribe(listener) {
-    return onPopState.add(listener);
+    return onChange.add(listener);
   }
 
 }

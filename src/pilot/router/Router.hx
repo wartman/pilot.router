@@ -2,23 +2,23 @@ package pilot.router;
 
 import pilot.Component;
 import pilot.Children;
+import pilot.Provider;
 
+/**
+  The Router provides context for nested Routes and
+  Links. It should be on the top-level of your app.
+**/
 class Router extends Component {
 
-  // not sure about `root` here
-  @:attribute var root:String = '';
-  @:attribute var children:Children;
-  @:attribute var history:History;
+  public static final HISTORY_ID = Type.getClassName(Router) + '#History';
 
-  @:init
-  public function setRoot() {
-    history.setRoot(root);
-  }
+  @:attribute var history:History;
+  @:attribute var children:Children;
 
   override function render() return html(
-    <HistoryProvider value={history}>
+    <Provider id={HISTORY_ID} value={history}>
       {children}
-    </HistoryProvider>
+    </Provider>
   );
 
 }

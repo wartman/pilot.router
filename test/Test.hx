@@ -12,20 +12,21 @@ class Test {
       case Some(v): trace(v.params);
     }
 
-    var history = new StaticHistory('/foo/bar');
+    var history = new HashHistory();
 
     Pilot.mount(
       Pilot.document.getElementById('root'),
       Pilot.html(<>
-        <Router root='' history={history}>
-          <button onClick={_ -> history.push('/')}>Home</button>
-          <button onClick={_ -> history.push('/foo/changed')}>Changed</button>
-          <button onClick={_ -> history.push('/foo/barg')}>Barg</button>
+        <Router history={history}>
+          <Link to=''>Home</Link>
+          <Link to='foo=changed'>Changed</Link>
+          <Link to='foo=barg'>Barg</Link>
           <div>
-            <RouteSwitcher>
-              <Route url="/foo/:id" component={FooComponent} />
-              <Route url="/" component={HomeComponent} />
-            </RouteSwitcher>
+            <Switch>
+              <Route url='' component={HomeComponent} />
+              <Route url="foo=:id" component={FooComponent} />
+              <p>You can stick any component in \<Switch />, just be aware that they will be re-rendered every time the history changes.</p>
+            </Switch>
           </div>
         </Router>
       </>)
@@ -44,6 +45,8 @@ class HomeComponent extends Component {
 
 class FooComponent extends Component {
 
+  // Attributes will be mapped directly to route params
+  // when used as the `Route#component` argument.
   @:attribute var id:String;
 
   override function render() {

@@ -54,8 +54,6 @@ enum Token {
   Key(name:String, prefix:String, suffix:String, pattern:String, modifier:String);
 }
 
-// Todo: I bet I could turn this into a macro.
-
 /**
   Haxe adaption of https://github.com/pillarjs/path-to-regexp/blob/master/src/index.ts
 **/
@@ -374,13 +372,13 @@ class PathTools {
     var start = options.start != null ? options.start : true;
     var end = options.end != null ? options.end : true;
     var encode = options.encode != null ? options.encode : s -> s;
-    var endsWith = '[${escapeString(options.endsWith != null ? options.endsWith : '')}]';
+    var endsWith = '[${escapeString(options.endsWith != null ? options.endsWith : '')}]|$';
     var delimiter = '[${escapeString(options.delimiter != null ? options.delimiter : '')}]';
     var route = start != null ? '^' : '';
 
     for (token in tokens) switch token {
       case Value(value): route += escapeString(encode(value));
-      case Key(name, prefix, suffix, pattern, modifier):
+      case Key(_, prefix, suffix, pattern, modifier):
         prefix = escapeString(encode(prefix));
         suffix = escapeString(encode(suffix));
 
@@ -399,23 +397,23 @@ class PathTools {
         } else {
           route += '(?:${prefix}${suffix})${modifier}';
         }
+    }
 
-        if (end) {
-          if (!strict) route += '${delimiter}?';
-          route += options.endsWith == null ? '$' : '(?=${endsWith})';
-        } else {
-          var endToken = tokens[tokens.length - 1];
-          var isEndDelimited = switch endToken {
-            case Value(value): delimiter.indexOf(value.charAt(value.length - 1)) > -1;
-            default: endToken == null;
-          }
-          if (!strict) {
-            route += '(?:${delimiter}(?=${endsWith}))?';
-          }
-          if (!isEndDelimited) {
-            route += '(?=${delimiter}|${endsWith})';
-          }
-        }
+    if (end) {
+      if (!strict) route += '${delimiter}?';
+      route += options.endsWith == null ? '$' : '(?=${endsWith})';
+    } else {
+      var endToken = tokens[tokens.length - 1];
+      var isEndDelimited = switch endToken {
+        case Value(value): delimiter.indexOf(value.charAt(value.length - 1)) > -1;
+        default: endToken == null;
+      }
+      if (!strict) {
+        route += '(?:${delimiter}(?=${endsWith}))?';
+      }
+      if (!isEndDelimited) {
+        route += '(?=${delimiter}|${endsWith})';
+      }
     }
 
     return new EReg(route, flags(options));
