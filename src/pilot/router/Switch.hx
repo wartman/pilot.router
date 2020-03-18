@@ -2,6 +2,7 @@ package pilot.router;
 
 import pilot.Component;
 import pilot.Children;
+import pilot.Provider;
 import pilot.Signal;
 import pilot.VNodeValue;
 
@@ -24,6 +25,7 @@ class Switch extends Component {
   @:attribute var currentUrl:String = '/';
   @:attribute( inject = Router.HISTORY_ID ) var history:History;
   var historySub:SignalSubscription<String>;
+  var context:RouteContext = new RouteContext();
 
   @:init
   function subscribeToHistory() {
@@ -42,10 +44,11 @@ class Switch extends Component {
   }
 
   override function render() {
+    context.setPath(currentUrl);
     return html(
-      <RouteContextProvider url={currentUrl}>
+      <Provider id={RouteContext.ID} value={context}>
         {children}
-      </RouteContextProvider>
+      </Provider>
     );
   }
 
