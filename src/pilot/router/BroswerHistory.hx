@@ -13,13 +13,13 @@ class BroswerHistory implements History {
   public function new(?root) {
     this.root = root;
     Browser.window.addEventListener('popstate', (e) -> {
-      onChange.dispatch(getLocation());
+      onChange.enqueue(getLocation());
     });
   }
 
   public function push(url:String) {
     Browser.window.history.pushState(null, null, url);
-    onChange.dispatch(getLocation());
+    onChange.enqueue(getLocation());
   }
 
   public function getLocation() {

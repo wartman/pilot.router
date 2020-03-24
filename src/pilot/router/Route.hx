@@ -33,8 +33,8 @@ class Route extends Component {
         context.markMatched();
         context.setParams(v.params);
         VComponent(component, v.params, url);
-      default: 
-        html(<></>);
+      default:
+        null;
     }
   }
 
