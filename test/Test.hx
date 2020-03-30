@@ -51,7 +51,11 @@ class FooComponent extends Component {
   // when used as the `Route#component` argument.
   @:attribute var id:String;
 
+  // __matchedPath is always available
+  @:attribute var __matchedPath:String;
+
   override function render() {
+    trace(__matchedPath);
     return html(<>The id is: {id}</>);
   }
 

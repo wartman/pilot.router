@@ -8,6 +8,8 @@ import pilot.VNode;
 
 using pilot.router.PathTools;
 
+// Todo: think on async stuff?
+// see: https://github.com/ReactTraining/react-router/issues/7200
 class Route extends Component {
   
   @:attribute var url:String;
@@ -46,6 +48,7 @@ class Route extends Component {
   }
 
   function createAttributes(params:Dynamic) {
+    Reflect.setField(params, '__matchedPath', context.path);
     if (data != null) {
       var d = data.copy();
       for (f in Reflect.fields(params)) {

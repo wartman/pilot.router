@@ -15,17 +15,17 @@ typedef RouterOptions = {
 **/
 class Router extends Component {
 
-  public static final id = Type.getClassName(Router);
+  public static final id = Type.getClassName(Router) + '#Options';
 
   @:attribute var history:History;
   @:attribute var children:Children;
   @:attribute var basename:String = '';
 
   override function render() return html(
-    <Provider id={id} value={ {
+    <Provider id={id} value={ ({
       history: history,
       basename: basename
-    } }>
+    }:RouterOptions) }>
       {children}
     </Provider>
   );
