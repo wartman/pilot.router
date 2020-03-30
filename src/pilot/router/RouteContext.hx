@@ -5,7 +5,7 @@ import haxe.DynamicAccess;
 @:allow(pilot.router)
 class RouteContext {
 
-  public static final ID = Type.getClassName(RouteContext);
+  public static final id = Type.getClassName(RouteContext);
 
   public var matched(default, null):Bool = false;
   public var path(default, null):String;

@@ -11,31 +11,58 @@ using pilot.router.PathTools;
 class Route extends Component {
   
   @:attribute var url:String;
-  @:attribute var component:WireType<Dynamic>;
+  @:attribute var to:RouteTarget;
   @:attribute var strict:Bool = false;
   @:attribute var sensitive:Bool = true;
   @:attribute var end:Bool = true;
-  @:attribute @:optional var params:DynamicAccess<Dynamic>;
-  @:attribute( inject = RouteContext.ID ) var context:RouteContext;
+  @:attribute @:optional var data:DynamicAccess<Dynamic>;
+  @:attribute( inject = Router.id ) var options:Router.RouterOptions;
+  @:attribute( inject = RouteContext.id ) var context:RouteContext;
   var matcher:PathMatcher;
 
   override function render():VNode {
+    if (matcher == null) createMatcher();
+    return switch matcher(context.path) {
+      case Some(v) if (!context.matched):
+        context.markMatched();
+        context.setParams(v.params);
+        to(createAttributes(v.params));
+      default:
+        null;
+    }
+  }
+
+  function createMatcher() {
     if (matcher == null) {
-      matcher = url.createMatcher({ 
+      var parsedUrl = url == '*' 
+        ? '(.)*' 
+        : options.basename + url;
+      matcher = parsedUrl.createMatcher({
         strict: strict,
         sensitive: sensitive,
         end: end
       });
     }
-    
-    return switch matcher(context.path) {
-      case Some(v) if (!context.matched):
-        context.markMatched();
-        context.setParams(v.params);
-        VComponent(component, v.params, url);
-      default:
-        null;
+  }
+
+  function createAttributes(params:Dynamic) {
+    if (data != null) {
+      var d = data.copy();
+      for (f in Reflect.fields(params)) {
+        d.set(f, Reflect.field(params, f));
+      }
+      return d;
     }
+    return params;
+  }
+
+}
+
+@:callable
+private abstract RouteTarget((props:Dynamic)->VNode) from (props:Dynamic)->VNode {
+  
+  @:from public static inline function ofWireType(type:WireType<Dynamic>):RouteTarget {
+    return props -> VComponent(type, props);
   }
 
 }

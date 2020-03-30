@@ -23,14 +23,14 @@ class Switch extends Component {
 
   @:attribute var children:Children;
   @:attribute var currentUrl:String = '/';
-  @:attribute( inject = Router.HISTORY_ID ) var history:History;
+  @:attribute( inject = Router.id ) var options:Router.RouterOptions;
   var historySub:SignalSubscription<String>;
   var context:RouteContext = new RouteContext();
 
   @:init
   function subscribeToHistory() {
-    __attrs.currentUrl = history.getLocation();
-    historySub = history.subscribe(setCurrentUrl);
+    __attrs.currentUrl = options.history.getLocation();
+    historySub = options.history.subscribe(setCurrentUrl);
   }
 
   @:dispose
@@ -46,7 +46,7 @@ class Switch extends Component {
   override function render() {
     context.setPath(currentUrl);
     return html(
-      <Provider id={RouteContext.ID} value={context}>
+      <Provider id={RouteContext.id} value={context}>
         {children}
       </Provider>
     );

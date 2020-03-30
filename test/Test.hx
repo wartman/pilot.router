@@ -12,19 +12,21 @@ class Test {
       case Some(v): trace(v.params);
     }
 
-    var history = new HashHistory();
+    var history = new BroswerHistory();
 
     Pilot.mount(
       Pilot.document.getElementById('root'),
       Pilot.html(<>
         <Router history={history}>
-          <Link to=''>Home</Link>
-          <Link to='foo=changed'>Changed</Link>
-          <Link to='foo=barg'>Barg</Link>
+          <Link to='/'>Home</Link>
+          <Link to='/func'>Func</Link>
+          <Link to='/foo/changed'>Changed</Link>
+          <Link to='/foo/barg'>Barg</Link>
           <div>
             <Switch>
-              <Route url='' component={HomeComponent} />
-              <Route url="foo=:id" component={FooComponent} />
+              <Route url='/' to={HomeComponent} />
+              <Route url='/func' to={_ -> <p>Works</p>} />
+              <Route url="/foo/:id" to={FooComponent} />
               <p>You can stick any component in \<Switch />, just be aware that they will be re-rendered every time the history changes.</p>
             </Switch>
           </div>
