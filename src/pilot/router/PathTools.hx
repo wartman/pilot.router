@@ -69,7 +69,9 @@ class PathTools {
         case '*' | '+' | '?':
           tokens.push({ type: Modifier, index: i, value: str.charAt(i++) });
         case '\\':
-          tokens.push({ type: EscapedChar, index: i++, value: str.charAt(i++) });
+          // why are escaped characters so confusing
+          while (str.charAt(i) == '\\' && i < str.length) i++;
+          tokens.push({ type: EscapedChar, index: i, value: str.charAt(i++) });
         case '{':
           tokens.push({ type: Open, index: i, value: str.charAt(i++) });
         case '}':
@@ -454,7 +456,7 @@ class PathTools {
 
   static function escapeString(str:String) {
     // return ~/([.+*?=^!:${}()[\]|\/\\])/g.replace(str, '\\$1');
-    var chars = '\\.+*?=^!:${}()[]|/'.split('');
+    var chars = '\\.+*?=^!:$${}()[]|/'.split('');
 		for (char in chars)
 			str = StringTools.replace(str, char, '\\$char');
 		return str;

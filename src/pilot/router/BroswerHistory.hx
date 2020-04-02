@@ -23,7 +23,7 @@ class BroswerHistory implements History {
   }
 
   public function getLocation() {
-    var path = Browser.location.pathname;
+    var path = Browser.location.pathname + Browser.location.search;
     // todo: what are we actually doing with `root`.
     if (root != null && path.startsWith(root)) {
       return path.substring(root.length);
