@@ -8,8 +8,6 @@ import pilot.VNode;
 
 using pilot.router.PathTools;
 
-// Todo: think on async stuff?
-// see: https://github.com/ReactTraining/react-router/issues/7200
 class Route extends Component {
   
   @:attribute var url:String;

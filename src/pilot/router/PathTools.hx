@@ -243,10 +243,14 @@ class PathTools {
         mustConsume(Close);
 
         result.push(Key(
-          if (pattern.length > 0) Std.string(key++) else '',
-          if (name.length > 0 && pattern.length == 0) defaultPattern else pattern,
+          if (name.length > 0) 
+            name 
+          else if (pattern.length > 0)
+            Std.string(key++) 
+          else '',
           prefix,
           suffix,
+          if (name.length > 0 && pattern.length == 0) defaultPattern else pattern,
           switch tryConsume(Modifier) {
             case null: '';
             case modifier: modifier;

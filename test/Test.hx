@@ -11,6 +11,15 @@ class Test {
       case None:
       case Some(v): trace(v.params);
     }
+    var testOptional = '/foo/:id{\\?page=:page}?'.createMatcher();
+    switch testOptional('/foo/bin?page=1') {
+      case None: trace('nope');
+      case Some(v): trace(v.params);
+    }
+    switch testOptional('/foo/bin') {
+      case None: trace('nope');
+      case Some(v): trace(v.params);
+    }
 
     var history = new BroswerHistory();
 
