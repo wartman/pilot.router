@@ -423,7 +423,6 @@ class PathTools {
       }
     }
 
-    trace(route);
     return new EReg(route, flags(options));
   }
 
