@@ -11,7 +11,7 @@ class Test {
       case None:
       case Some(v): trace(v.params);
     }
-    var testOptional = '/foo/:id{\\?page=:page}?'.createMatcher();
+    var testOptional = '/foo/:id{\\?page=:page(\\d+)}?'.createMatcher();
     switch testOptional('/foo/bin?page=1') {
       case None: trace('nope');
       case Some(v): trace(v.params);

@@ -111,7 +111,8 @@ class PathTools {
           while (j < str.length) {
             switch str.charAt(j) {
               case '\\':
-                pattern += str.charAt(j++) + str.charAt(j++);
+                while (str.charAt(j) == '\\' && j < str.length) j++;
+                pattern += '\\' + str.charAt(j++);
               case ')':
                 count--;
                 if (count == 0) {
@@ -422,6 +423,7 @@ class PathTools {
       }
     }
 
+    trace(route);
     return new EReg(route, flags(options));
   }
 
