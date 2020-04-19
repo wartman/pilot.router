@@ -1,14 +1,18 @@
 package pilot.router;
 
 using StringTools;
+using tink.CoreApi;
 
 class StaticHistory implements History {
   
-  final onChange:Signal<String> = new Signal();
+  final onChangeTrigger:SignalTrigger<String>;
+  public final onChange:Signal<String>;
   var root:String = '';
   var currentUrl:String;
 
   public function new(?initUrl) {
+    onChangeTrigger = Signal.trigger();
+    onChange = onChangeTrigger.asSignal();
     currentUrl = initUrl;
   }
 
@@ -22,11 +26,11 @@ class StaticHistory implements History {
 
   public function push(url:String) {
     currentUrl = url;
-    onChange.dispatch(getLocation());
+    onChangeTrigger.trigger(getLocation());
   }
 
   public inline function subscribe(listener) {
-    return onChange.add(listener);
+    return onChange.handle(listener);
   }
 
 }
