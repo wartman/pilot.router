@@ -1,15 +1,19 @@
 package pilot.router;
 
 import js.Browser;
-import pilot.Signal;
+
+using tink.CoreApi;
 
 class HashHistory implements History {
 
-  final onChange:Signal<String> = new Signal();
+  final onChangeTrigger:SignalTrigger<String>;
+  public final onChange:Signal<String>;
 
   public function new() {
+    onChangeTrigger = Signal.trigger();
+    onChange = onChangeTrigger.asSignal();
     Browser.window.addEventListener('popstate', (e) -> {
-      onChange.dispatch(getLocation());
+      onChangeTrigger.trigger(getLocation());
     });
   }
   
@@ -19,11 +23,11 @@ class HashHistory implements History {
   
   public function push(path:String):Void {
     Browser.window.history.pushState(null, null, parseHash(path));
-    onChange.dispatch(getLocation());
+    onChangeTrigger.trigger(getLocation());
   }
   
-  public function subscribe(listener:SignalListener<String>):SignalSubscription<String> {
-    return onChange.add(listener);
+  public function subscribe(listener) {
+    return onChange.handle(listener);
   }
 
   function parseHash(path:String) {

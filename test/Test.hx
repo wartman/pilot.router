@@ -1,5 +1,6 @@
 import pilot.Component;
 import pilot.router.*;
+import pilot.platform.dom.Dom;
 
 using pilot.router.PathTools;
 
@@ -23,8 +24,8 @@ class Test {
 
     var history = new BroswerHistory();
 
-    Pilot.mount(
-      Pilot.document.getElementById('root'),
+    Dom.mount(
+      js.Browser.document.getElementById('root'),
       Pilot.html(<>
         <Router history={history}>
           <Link to='/'>Home</Link>

@@ -3,8 +3,9 @@ package pilot.router;
 import pilot.Component;
 import pilot.Children;
 import pilot.Provider;
-import pilot.Signal;
 import pilot.VNodeValue;
+
+using tink.CoreApi;
 
 /**
   The Switch provides context for active routes. When you
@@ -24,7 +25,7 @@ class Switch extends Component {
   @:attribute var children:Children;
   @:attribute var currentUrl:String = '/';
   @:attribute( inject = Router.id ) var options:Router.RouterOptions;
-  var historySub:SignalSubscription<String>;
+  var historySub:CallbackLink;
   var context:RouteContext = new RouteContext();
 
   @:init

@@ -1,0 +1,13 @@
+{
+  "name": "pilot.router",
+  "license": "MIT",
+  "classPath": "src",
+  "contributors": [ "wartman" ],
+  "dependencies": {
+    "tink_core": "",
+    "pilot": ""
+  },
+  "description": "Simple routing for Pilot.",
+  "releasenote": "Update to pilot 0.3.*",
+  "version": "0.1.0"
+}

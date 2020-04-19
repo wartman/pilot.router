@@ -1,9 +1,10 @@
 package pilot.router;
 
-import pilot.Signal;
+using tink.CoreApi;
 
 interface History {
+  public final onChange:Signal<String>;
   public function getLocation():String;
   public function push(url:String):Void;
-  public function subscribe(listener:SignalListener<String>):SignalSubscription<String>;
+  public function subscribe(listener:Callback<String>):CallbackLink;
 }

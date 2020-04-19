@@ -15,7 +15,7 @@ class Route extends Component {
   @:attribute var strict:Bool = false;
   @:attribute var sensitive:Bool = true;
   @:attribute var end:Bool = true;
-  @:attribute @:optional var data:DynamicAccess<Dynamic>;
+  @:attribute( optional ) var data:DynamicAccess<Dynamic>;
   @:attribute( inject = Router.id ) var options:Router.RouterOptions;
   @:attribute( inject = RouteContext.id ) var context:RouteContext;
   var matcher:PathMatcher;

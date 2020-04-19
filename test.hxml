@@ -1,6 +1,7 @@
 -cp src
 -cp test
 
+-lib tink_core
 -lib pilot
 -main Test
 

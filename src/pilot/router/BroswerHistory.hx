@@ -1,25 +1,28 @@
 package pilot.router;
 
 import js.Browser;
-import pilot.Signal;
 
 using StringTools;
+using tink.CoreApi;
 
 class BroswerHistory implements History {
 
   var root:String;
-  final onChange:Signal<String> = new Signal();
+  final onChangeTrigger:SignalTrigger<String>;
+  public final onChange:Signal<String>;
 
   public function new(?root) {
+    onChangeTrigger = Signal.trigger();
+    onChange = onChangeTrigger.asSignal();
     this.root = root;
     Browser.window.addEventListener('popstate', (e) -> {
-      onChange.enqueue(getLocation());
+      onChangeTrigger.trigger(getLocation());
     });
   }
 
   public function push(url:String) {
     Browser.window.history.pushState(null, null, url);
-    onChange.enqueue(getLocation());
+    onChangeTrigger.trigger(getLocation());
   }
 
   public function getLocation() {
@@ -32,7 +35,7 @@ class BroswerHistory implements History {
   }
 
   public inline function subscribe(listener) {
-    return onChange.add(listener);
+    return onChange.handle(listener);
   }
 
 }
