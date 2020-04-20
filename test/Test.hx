@@ -35,7 +35,7 @@ class Test {
           <div>
             <Switch>
               <Route url='/' to={HomeComponent} />
-              <Route url='/func' to={_ -> <p>Works</p>} />
+              <Route url='/func' to={_ -> <p @key="works">Works</p>} />
               <Route url="/foo/:id" to={FooComponent} />
               <p>You can stick any component in \<Switch />, just be aware that they will be re-rendered every time the history changes.</p>
             </Switch>
@@ -50,7 +50,7 @@ class Test {
 class HomeComponent extends Component {
 
   override function render() {
-    return html(<>home</>);
+    return html(<p @key="home">home</p>);
   }
 
 }

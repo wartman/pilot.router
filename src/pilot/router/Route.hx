@@ -20,8 +20,19 @@ class Route extends Component {
   @:attribute( inject = RouteContext.id ) var context:RouteContext;
   var matcher:PathMatcher;
 
+  @:init
+  function createMatcher() {
+    var parsedUrl = url == '*' 
+      ? '(.)*' 
+      : options.basename + url;
+    matcher = parsedUrl.createMatcher({
+      strict: strict,
+      sensitive: sensitive,
+      end: end
+    });
+  }
+
   override function render():VNode {
-    if (matcher == null) createMatcher();
     return switch matcher(context.path) {
       case Some(v) if (!context.matched):
         context.markMatched();
@@ -29,19 +40,6 @@ class Route extends Component {
         to(createAttributes(v.params));
       default:
         null;
-    }
-  }
-
-  function createMatcher() {
-    if (matcher == null) {
-      var parsedUrl = url == '*' 
-        ? '(.)*' 
-        : options.basename + url;
-      matcher = parsedUrl.createMatcher({
-        strict: strict,
-        sensitive: sensitive,
-        end: end
-      });
     }
   }
 
