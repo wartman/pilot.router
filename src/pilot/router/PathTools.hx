@@ -47,8 +47,6 @@ typedef ERegToFunctionOptions = {
   ?decode:(value:String, token:Token)->String
 }
 
-typedef PathMatcher = (path:String) -> Option<{ path:String, params:DynamicAccess<Dynamic> }>;
-
 enum Token {
   Value(value:String);
   Key(name:String, prefix:String, suffix:String, pattern:String, modifier:String);

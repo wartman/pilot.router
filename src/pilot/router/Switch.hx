@@ -1,9 +1,6 @@
 package pilot.router;
 
-import pilot.Component;
-import pilot.Children;
-import pilot.Provider;
-import pilot.VNodeValue;
+import haxe.DynamicAccess;
 
 using tink.CoreApi;
 
@@ -20,18 +17,20 @@ using tink.CoreApi;
   the History provided by the Router, but not want it to update when the
   route changes).
 **/
-class Switch extends Component {
+class Switch extends State {
 
-  @:attribute var children:Children;
-  @:attribute var currentUrl:String = '/';
-  @:attribute( inject = Router.id ) var options:Router.RouterOptions;
+  @:attribute var path:String = null;
+  @:attribute var matched:Bool = false;
+  @:attribute(consume) var router:Router;
+  public var params(default, null):DynamicAccess<Dynamic>;
   var historySub:CallbackLink;
-  var context:RouteContext = new RouteContext();
 
   @:init
   function subscribeToHistory() {
-    __attrs.currentUrl = options.history.getLocation();
-    historySub = options.history.subscribe(setCurrentUrl);
+    if (path == null) {
+      __attrs.path = router.history.getLocation();
+    }
+    historySub = router.history.subscribe(setPath);
   }
 
   @:dispose
@@ -39,18 +38,20 @@ class Switch extends Component {
     historySub.cancel();
   }
 
-  @:update
-  public function setCurrentUrl(url:String) {
-    return { currentUrl: url };
+  @:transition
+  public function setPath(path:String) {
+    return {
+      path: path,
+      matched: false
+    };
   }
 
-  override function render() {
-    context.setPath(currentUrl);
-    return html(
-      <Provider id={RouteContext.id} value={context}>
-        {children}
-      </Provider>
-    );
+  public function markMatched() {
+    __attrs.matched = true;
+  }
+
+  public function setParams(params) {
+    this.params = params;
   }
 
 }

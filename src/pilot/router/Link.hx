@@ -22,13 +22,14 @@ class Link extends Component {
     @:attribute(optional) var onClick:(e:Dynamic)->Void;
   #end
   @:attribute(optional) var style:Style;
-  @:attribute( inject = Router.id ) var options:Router.RouterOptions;
+  @:attribute(consume) var router:Router;
 
   override function render() return html(
     <a class={style} href={to} onClick={
       onClick != null ? onClick : e -> {
         e.preventDefault();
-        options.history.push(to);
+        var url = router.basename + to;
+        router.history.push(url);
       }
     }>{children}</a>
   );

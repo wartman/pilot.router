@@ -27,7 +27,7 @@ class Test {
     Dom.mount(
       js.Browser.document.getElementById('root'),
       Pilot.html(<>
-        <Router history={history}>
+        <Router basename="/dist" history={history}>
           <Link to='/'>Home</Link>
           <Link to='/func'>Func</Link>
           <Link to='/foo/changed'>Changed</Link>
@@ -65,7 +65,6 @@ class FooComponent extends Component {
   @:attribute var __matchedPath:String;
 
   override function render() {
-    trace(__matchedPath);
     return html(<>The id is: {id}</>);
   }
 
