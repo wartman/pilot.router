@@ -6,8 +6,8 @@ using tink.CoreApi;
 
 /**
   The Switch provides context for active routes. When you
-  set `currentUrl` it triggers a re-render and cuases all nested
-  Routes to check for matches. The `currentUrl` will also be updated
+  set `currentUrl` it triggers a re-render and causes all nested
+  Routes to check for matches. The `path` will also be updated
   by when the provided History changes (generally supplied by a
   parent Router).
 
@@ -20,7 +20,7 @@ using tink.CoreApi;
 class Switch extends State {
 
   @:attribute var basename:String = '';
-  @:attribute var path:String = null;
+  @:attribute var location:String = null;
   @:attribute var matched:Bool = false;
   @:attribute(consume) var router:Router;
   public var params(default, null):DynamicAccess<Dynamic>;
@@ -28,10 +28,10 @@ class Switch extends State {
 
   @:init
   function subscribeToHistory() {
-    if (path == null) {
-      __attrs.path = router.history.getLocation();
+    if (location == null) {
+      update({ location: router.history.getLocation()  }, true);
     }
-    historySub = router.history.subscribe(setPath);
+    historySub = router.history.subscribe(setLocation);
   }
 
   @:dispose
@@ -40,20 +40,23 @@ class Switch extends State {
   }
 
   @:transition
-  public function setPath(path:String) {
+  public function setLocation(location:String) {
     return {
-      path: path,
+      location: location,
       matched: false
+    };
+  }
+
+  @:transition(silent)
+  public function markMatched() {
+    return { 
+      matched: true 
     };
   }
 
   public function preparePath(subPath:String) {
     var path = basename + subPath;
     return router.preparePath(path);
-  }
-
-  public function markMatched() {
-    __attrs.matched = true;
   }
 
   public function setParams(params) {

@@ -32,7 +32,7 @@ class Route extends Component {
   }
 
   override function render():VNode {
-    return switch matcher(context.path) {
+    return switch matcher(context.location) {
       case Some(v) if (!context.matched):
         context.markMatched();
         context.setParams(v.params);
@@ -43,7 +43,7 @@ class Route extends Component {
   }
 
   function createAttributes(params:Dynamic) {
-    Reflect.setField(params, '__matchedPath', context.path);
+    Reflect.setField(params, '__matchedPath', context.location);
     if (data != null) {
       var d = data.copy();
       for (f in Reflect.fields(params)) {
