@@ -10,7 +10,8 @@ import pilot.Style;
   A Link that intercepts the given URL and updates the Router.
 
   While `Link` must be used inside a `Router`, it does NOT need to
-  be used inside a `Switch`.
+  be used inside a `Switch`. Also note that `Link` components will
+  use the basename of the `Switch` or `Router` they are wrapped in.
 **/
 class Link extends Component {
   
@@ -23,13 +24,18 @@ class Link extends Component {
   #end
   @:attribute(optional) var style:Style;
   @:attribute(consume) var router:Router;
+  @:attribute(consume, optional) var context:Switch;
+  @:computed var parsedPath:String = if (context != null) {
+    context.preparePath(to);
+  } else {
+    router.preparePath(to);
+  }
 
   override function render() return html(
-    <a class={style} href={to} onClick={
+    <a class={style} href={parsedPath} onClick={
       onClick != null ? onClick : e -> {
         e.preventDefault();
-        var url = router.basename + to;
-        router.history.push(url);
+        router.history.push(parsedPath);
       }
     }>{children}</a>
   );

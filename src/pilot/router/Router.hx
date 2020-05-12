@@ -12,4 +12,8 @@ class Router extends State {
   @:attribute var history:History;
   @:attribute var basename:String = '';
 
+  public function preparePath(subPath:String) {
+    return basename + subPath;
+  }
+
 }

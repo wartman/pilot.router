@@ -19,6 +19,7 @@ using tink.CoreApi;
 **/
 class Switch extends State {
 
+  @:attribute var basename:String = '';
   @:attribute var path:String = null;
   @:attribute var matched:Bool = false;
   @:attribute(consume) var router:Router;
@@ -44,6 +45,11 @@ class Switch extends State {
       path: path,
       matched: false
     };
+  }
+
+  public function preparePath(subPath:String) {
+    var path = basename + subPath;
+    return router.preparePath(path);
   }
 
   public function markMatched() {

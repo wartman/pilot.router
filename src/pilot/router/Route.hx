@@ -16,16 +16,14 @@ class Route extends Component {
   @:attribute var sensitive:Bool = true;
   @:attribute var end:Bool = true;
   @:attribute(optional) var data:DynamicAccess<Dynamic>;
-  @:attribute(consume) var router:Router;
   @:attribute(consume) var context:Switch;
   var matcher:PathMatcher;
 
   @:init
   function createMatcher() {
     var parsedUrl = url == '*' 
-      ? '(.)*' 
-      : router.basename + url;
-    trace(parsedUrl);
+      ? context.preparePath('(.)*') 
+      : context.preparePath(url);
     matcher = parsedUrl.createMatcher({
       strict: strict,
       sensitive: sensitive,
