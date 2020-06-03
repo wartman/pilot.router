@@ -8,6 +8,6 @@
     "pilot": ""
   },
   "description": "Simple routing for Pilot.",
-  "releasenote": "Update to pilot 0.3.*",
-  "version": "0.1.0"
+  "releasenote": "Update to pilot 0.4.*",
+  "version": "0.2.0"
 }
